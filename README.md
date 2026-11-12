@@ -26,7 +26,7 @@ Correct values for each sample invoice, used to measure extraction accuracy.
 
 ## Roadmap
 - [x] Phase 0: Sample invoices and answer key
-- [] Phase 1: Extraction script
+- [ ] Phase 1: Extraction script
 - [ ] Phase 2: Accuracy check and number validation
 - [ ] Phase 3: FastAPI backend
 - [ ] Phase 4: Flutter web/app
