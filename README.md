@@ -2,7 +2,7 @@
 
 A tool that reads invoices (PDF or photo), extracts key fields with an LLM, and lets a person review, correct, and export them to CSV.
 
-**Status:** Early development (Phase 0: sample data and answer key).
+**Status:** Early development (Phase 1: Added a script src/read_pdf.py that opens pdfs and prints its data in terminal).
 
 ## Planned flow
 1. Upload an invoice
@@ -10,6 +10,8 @@ A tool that reads invoices (PDF or photo), extracts key fields with an LLM, and 
 3. Check that the numbers add up
 4. Review and correct in a side-by-side screen
 5. Export to CSV
+6. Create a python script by importing sys and pdfplumber
+7. Script reads a pdf and prints its data in terminal
 
 ## Tech stack (planned)
 Flutter (for both app and web) · FastAPI · Groq LLM · Pydantic · pdfplumber + Tesseract OCR
@@ -26,7 +28,7 @@ Correct values for each sample invoice, used to measure extraction accuracy.
 
 ## Roadmap
 - [x] Phase 0: Sample invoices and answer key
-- [ ] Phase 1: Extraction script
+- [x] Phase 1: Extraction script
 - [ ] Phase 2: Accuracy check and number validation
 - [ ] Phase 3: FastAPI backend
 - [ ] Phase 4: Flutter web/app
