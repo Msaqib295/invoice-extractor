@@ -3,14 +3,17 @@ import sys
 
 from extract import extract_invoice
 from read_pdf import read_pdf_text
+from validate import check_totals
 
-FIELDS = ["vendor", "invoice_number", "date", "total", "tax"]
+FIELDS = ["vendor", "invoice_number", "date", "subtotal",
+          "discount", "tax", "delivery", "total"]
+NUMERIC = {"subtotal", "discount", "tax", "delivery", "total"}
 
 
 def norm(field, value):
     if value is None or value == "":
         return None
-    if field in ("total", "tax"):
+    if field in NUMERIC:
         return round(float(value), 2)
     if field == "vendor":
         return " ".join(str(value).split()).lower()
@@ -22,12 +25,17 @@ def evaluate(split):
         rows = [r for r in csv.DictReader(f)
                 if r["split"] == split and r["filename"].endswith(".pdf")]
     correct = total = 0
+    checks = {}
     for row in rows:
+        got = {}
         try:
-            got = extract_invoice(read_pdf_text("samples/" + row["filename"])).model_dump()
+            invoice = extract_invoice(read_pdf_text("samples/" + row["filename"]))
+            got = invoice.model_dump()
+            status = check_totals(invoice)["status"]
         except Exception as err:
             print(f"{row['filename']}: FAILED ({err})")
-            got = {}
+            status = "failed"
+        checks[status] = checks.get(status, 0) + 1
         for field in FIELDS:
             expected, actual = norm(field, row[field]), norm(field, got.get(field))
             total += 1
@@ -36,6 +44,7 @@ def evaluate(split):
             else:
                 print(f"{row['filename']} {field}: expected {expected!r}, got {actual!r}")
     print(f"\n{split}: {correct} of {total} fields correct")
+    print("Number check results:", checks)
 
 
 if __name__ == "__main__":

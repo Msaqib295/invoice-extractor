@@ -1,11 +1,11 @@
-filename,split,vendor,invoice_number,date,total,tax
-inv01.pdf,build,Karachi Office Supplies,INV-1042,2026-10-14,18703,2853
-inv02.pdf,build,AL-NOOR ELECTRONICS,2026/0087,2026-11-03,26078,3978
-inv03.pdf,build,Sindh Printing House,SPH-311,2026-10-21,135700,20700
-inv04.pdf,build,Metro Stationers,MS-2210,2026-11-07,35764,5364
-inv05.pdf,test,Zubair Hardware,ZH/5531,2026-11-12,138970,20970
-inv06.pdf,build,Karachi Tech Solutions,KTS-0067,2026-10-28,459610,70110
-inv07.pdf,test,Pearl Catering Services,PCS-4410,2026-11-09,89700,11700
-inv08.jpg,test,Faisal General Store,FGS-208,2026-11-05,11033,1683
-inv09.jpg,test,Nadeem Auto Parts,NAP/771,2026-11-10,20650,3150
-inv10.pdf,test,Corner Bakery,,2026-11-13,4550,
+filename,split,vendor,invoice_number,date,subtotal,discount,tax,delivery,total
+inv01.pdf,build,Karachi Office Supplies,INV-1042,2026-10-14,15850,,2853,,18703
+inv02.pdf,build,AL-NOOR ELECTRONICS,2026/0087,2026-11-03,22100,,3978,,26078
+inv03.pdf,build,Sindh Printing House,SPH-311,2026-10-21,115000,,20700,,135700
+inv04.pdf,build,Metro Stationers,MS-2210,2026-11-07,30850,1050,5364,600,35764
+inv05.pdf,test,Zubair Hardware,ZH/5531,2026-11-12,116500,,20970,1500,138970
+inv06.pdf,build,Karachi Tech Solutions,KTS-0067,2026-10-28,389500,,70110,,459610
+inv07.pdf,test,Pearl Catering Services,PCS-4410,2026-11-09,78000,,11700,,89700
+inv08.jpg,test,Faisal General Store,FGS-208,2026-11-05,9350,,1683,,11033
+inv09.jpg,test,Nadeem Auto Parts,NAP/771,2026-11-10,17500,,3150,,20650
+inv10.pdf,test,Corner Bakery,,2026-11-13,4550,,,,4550
