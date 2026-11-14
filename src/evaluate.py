@@ -31,6 +31,8 @@ def evaluate(split):
         try:
             invoice = extract_invoice(read_pdf_text("samples/" + row["filename"]))
             got = invoice.model_dump()
+            if "--show" in sys.argv:
+             print(row["filename"], got)
             status = check_totals(invoice)["status"]
         except Exception as err:
             print(f"{row['filename']}: FAILED ({err})")
