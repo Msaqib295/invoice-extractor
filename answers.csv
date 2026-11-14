@@ -2,3 +2,10 @@ filename,split,vendor,invoice_number,date,total,tax
 inv01.pdf,build,Karachi Office Supplies,INV-1042,2026-10-14,18703,2853
 inv02.pdf,build,AL-NOOR ELECTRONICS,2026/0087,2026-11-03,26078,3978
 inv03.pdf,build,Sindh Printing House,SPH-311,2026-10-21,135700,20700
+inv04.pdf,build,Metro Stationers,MS-2210,2026-11-07,35764,5364
+inv05.pdf,test,Zubair Hardware,ZH/5531,2026-11-12,138970,20970
+inv06.pdf,build,Karachi Tech Solutions,KTS-0067,2026-10-28,459610,70110
+inv07.pdf,test,Pearl Catering Services,PCS-4410,2026-11-09,89700,11700
+inv08.jpg,test,Faisal General Store,FGS-208,2026-11-05,11033,1683
+inv09.jpg,test,Nadeem Auto Parts,NAP/771,2026-11-10,20650,3150
+inv10.pdf,test,Corner Bakery,,2026-11-13,4550,
