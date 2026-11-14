@@ -39,8 +39,17 @@ Correct values for each sample invoice, used to measure extraction accuracy.
 - `total`, `tax`: plain numbers, no commas or currency symbols; `tax` is the tax amount, not the rate
 - Blank cell = field not present on the invoice
 
-## Early results
-On the three clean synthetic invoices used while building, all five fields were extracted correctly. This is not an accuracy figure: those invoices are in the build set, and the held-out test set (including phone photos and a missing-field case) has not been created yet.
+## Results
+Prompt v2 (8 fields: vendor, invoice number, date, subtotal, discount, tax, delivery, total), Groq `openai/gpt-oss-20b`.
+
+| Set | Invoices | Fields correct | Number check |
+|---|---|---|---|
+| Build | 5 | 40 / 40 | 5 ok |
+| Test (held out) | 3 digital PDFs | 24 / 24 | 3 ok |
+
+Earlier prompt v1 (5 fields) scored 25 / 25 on the build set.
+
+**Limitations:** all invoices are synthetic and clean. The two phone-photo invoices are not yet scored because OCR is not implemented. A small test set means a perfect score says little about real-world documents.
 
 ## Tech stack
 Python · pdfplumber · Groq LLM · Pydantic
