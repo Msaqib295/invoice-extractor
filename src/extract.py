@@ -5,13 +5,12 @@ from typing import Optional
 from dotenv import load_dotenv
 from groq import Groq
 from pydantic import BaseModel, ValidationError
-from read_pdf import read_pdf_text
+
+from read_document import read_document
 from validate import check_totals
 
-from read_pdf import read_pdf_text
-
 load_dotenv(override=True)
-client = Groq()  
+client = Groq()  # reads GROQ_API_KEY from the environment
 MODEL = "openai/gpt-oss-20b"  
 
 
@@ -44,6 +43,7 @@ grouping (1,35,700 becomes 135700).
 - If a field is not printed on the invoice, use null. Do not guess, and do not \
 calculate missing values yourself."""
 
+
 def extract_invoice(text):
     response = client.chat.completions.create(
         model=MODEL,
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     for path in sys.argv[1:]:
         print(f"--- {path}")
         try:
-            invoice = extract_invoice(read_pdf_text(path))
+            invoice = extract_invoice(read_document(path)[0])
             print(invoice.model_dump_json(indent=2))
             print("Check:", check_totals(invoice)["message"])
         except (ValidationError, json.JSONDecodeError) as err:

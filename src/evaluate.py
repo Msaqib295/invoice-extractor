@@ -1,8 +1,8 @@
 import csv
 import sys
-
+from groq import APIConnectionError
 from extract import extract_invoice
-from read_pdf import read_pdf_text
+from read_document import read_document
 from validate import check_totals
 
 FIELDS = ["vendor", "invoice_number", "date", "subtotal",
@@ -22,18 +22,20 @@ def norm(field, value):
 
 def evaluate(split):
     with open("answers.csv", newline="", encoding="utf-8") as f:
-        rows = [r for r in csv.DictReader(f)
-                if r["split"] == split and r["filename"].endswith(".pdf")]
+        rows = [r for r in csv.DictReader(f) if r["split"] == split]
     correct = total = 0
     checks = {}
     for row in rows:
         got = {}
         try:
-            invoice = extract_invoice(read_pdf_text("samples/" + row["filename"]))
+            text = read_document("samples/" + row["filename"])[0]
+            invoice = extract_invoice(text)
             got = invoice.model_dump()
-            if "--show" in sys.argv:
-             print(row["filename"], got)
             status = check_totals(invoice)["status"]
+            if "--show" in sys.argv:
+                print(row["filename"], got)
+        except APIConnectionError:
+            sys.exit("Could not reach Groq. Check your internet and try again. No score computed.")
         except Exception as err:
             print(f"{row['filename']}: FAILED ({err})")
             status = "failed"
@@ -52,5 +54,5 @@ def evaluate(split):
 if __name__ == "__main__":
     split = sys.argv[1] if len(sys.argv) > 1 else "build"
     if split == "test":
-        print("Running the TEST set. Don't tune the prompt based on this.\n")
+        print("Running the TEST set. Don't tune the prompt or OCR based on this.\n")
     evaluate(split)
