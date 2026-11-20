@@ -12,7 +12,7 @@ A tool that reads invoices (PDF or photo), extracts key fields with an LLM, and 
 5. Export to CSV
 
 ## How it works today
-`src/read_pdf.py` pulls the text out of a PDF. `src/extract.py` sends that text to an LLM (Groq) with strict instructions, then validates the reply with Pydantic so malformed output fails loudly instead of silently.
+`src/read_document.py` reads digital PDFs directly, and runs OCR (Tesseract) on photos and scanned PDFs, keeping each word's position for highlighting later. `src/extract.py` sends the text to an LLM (Groq) with strict instructions and validates the reply with Pydantic. `src/validate.py` checks that subtotal, discount, tax, and delivery add up to the total, and `src/evaluate.py` scores results against `answers.csv`.
 
 ## Run it
 1. Clone the repo and create a virtual environment:
