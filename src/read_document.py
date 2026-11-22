@@ -13,9 +13,8 @@ if not shutil.which("tesseract"):
 
 IMAGE_TYPES = {".jpg", ".jpeg", ".png"}
 MIN_PDF_CHARS = 30  
-
-
 MIN_WIDTH = 1600  # enlarge small images so Tesseract can read the characters
+MIN_WORD_CONF = 45  # drop words Tesseract is very unsure about
 
 
 def ocr_image(img, page, psm=6):
@@ -25,14 +24,24 @@ def ocr_image(img, page, psm=6):
         img = img.resize((MIN_WIDTH, int(img.height * scale)), Image.LANCZOS)
     img = ImageOps.autocontrast(img)
     config = f"--psm {psm}" if psm else ""
-    text = pytesseract.image_to_string(img, config=config)
     data = pytesseract.image_to_data(img, config=config, output_type=pytesseract.Output.DICT)
-    words = [
-        {"text": t, "page": page, "x": data["left"][i], "y": data["top"][i],
-         "w": data["width"][i], "h": data["height"][i]}
-        for i, t in enumerate(data["text"]) if t.strip()
-    ]
+    lines, words = {}, []
+    for i, t in enumerate(data["text"]):
+        conf = float(data["conf"][i])
+        if not t.strip() or conf < 0:
+            continue
+        words.append({"text": t, "page": page, "x": data["left"][i], "y": data["top"][i],
+                      "w": data["width"][i], "h": data["height"][i], "conf": conf})
+        if conf >= MIN_WORD_CONF:
+            key = (data["block_num"][i], data["par_num"][i], data["line_num"][i])
+            lines.setdefault(key, []).append(t)
+    text = "\n".join(" ".join(ws) for _, ws in sorted(lines.items()))
     return text, words
+
+
+def mean_confidence(words):
+    confs = [w["conf"] for w in words if "conf" in w]
+    return sum(confs) / len(confs) if confs else None
 
 
 def read_document(path):

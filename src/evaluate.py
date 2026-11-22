@@ -1,6 +1,9 @@
 import csv
+import os
 import sys
+
 from groq import APIConnectionError
+
 from extract import extract_invoice
 from read_document import read_document
 from validate import check_totals
@@ -23,8 +26,15 @@ def norm(field, value):
 def evaluate(split):
     with open("answers.csv", newline="", encoding="utf-8") as f:
         rows = [r for r in csv.DictReader(f) if r["split"] == split]
+    if not rows:
+        sys.exit(f"No rows found for split '{split}' in answers.csv.")
+    missing = [r["filename"] for r in rows if not os.path.exists("samples/" + r["filename"])]
+    if missing:
+        sys.exit("Missing files in samples/: " + ", ".join(missing))
+
     correct = total = 0
     checks = {}
+    counts = {}
     for row in rows:
         got = {}
         try:
@@ -46,9 +56,13 @@ def evaluate(split):
             if expected == actual:
                 correct += 1
             else:
-                print(f"{row['filename']} {field}: expected {expected!r}, got {actual!r}")
+                kind = "EMPTY" if actual is None else ("INVENTED" if expected is None else "WRONG")
+                counts[kind] = counts.get(kind, 0) + 1
+                print(f"{row['filename']} {field}: {kind}, expected {expected!r}, got {actual!r}")
+
     print(f"\n{split}: {correct} of {total} fields correct")
     print("Number check results:", checks)
+    print("Misses:", counts)
 
 
 if __name__ == "__main__":
