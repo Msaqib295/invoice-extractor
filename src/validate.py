@@ -1,4 +1,11 @@
+CORE = ("vendor", "date", "total")
+
+
 def check_totals(inv, tolerance=1.0):
+    missing = [f for f in CORE if getattr(inv, f) in (None, "")]
+    if missing:
+        return {"status": "review",
+                "message": "Could not read: " + ", ".join(missing) + ". Please check this document."}
     if inv.subtotal is None or inv.total is None:
         return {"status": "cannot_check",
                 "message": "Subtotal or total not found, so the numbers could not be checked."}

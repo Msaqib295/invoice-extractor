@@ -53,6 +53,6 @@ def evaluate(split):
 
 if __name__ == "__main__":
     split = sys.argv[1] if len(sys.argv) > 1 else "build"
-    if split == "test":
+    if split.startswith("test"):
         print("Running the TEST set. Don't tune the prompt or OCR based on this.\n")
     evaluate(split)
